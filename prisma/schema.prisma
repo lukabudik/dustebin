@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Paste {
+  id         String    @id @default(cuid())
+  content    String
+  language   String    @default("plaintext")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  expiresAt  DateTime? @map("expires_at")
+  isCompressed Boolean @default(false) @map("is_compressed")
+  passwordHash String?  @map("password_hash")
+  views      Int       @default(0)
+  burnAfterRead Boolean @default(false) @map("burn_after_read")
+
+  @@map("pastes")
+  @@index([language])
+  @@index([createdAt])
+  @@index([expiresAt])
+}
