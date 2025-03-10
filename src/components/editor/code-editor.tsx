@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTheme } from 'next-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -44,7 +44,7 @@ export function CodeEditor({
   const [extensions, setExtensions] = useState<Extension[]>([]);
 
   // Custom styles to make the gutter (line numbers) white and remove dotted border
-  const customStyles = EditorView.theme({
+  const customStyles = useMemo(() => EditorView.theme({
     "&": {
       backgroundColor: "transparent !important",
       height: "100% !important",
@@ -85,7 +85,7 @@ export function CodeEditor({
     ".cm-editor.cm-focused": {
       outline: "transparent",
     }
-  });
+  }), [theme]);
 
   // Load language extension based on selected language
   useEffect(() => {
@@ -134,7 +134,7 @@ export function CodeEditor({
     }
     
     setExtensions([langExtension, customStyles]);
-  }, [language, showSyntaxHighlighting, theme, customStyles]);
+  }, [language, showSyntaxHighlighting, customStyles]);
 
   // Only render CodeMirror on the client
   useEffect(() => {
