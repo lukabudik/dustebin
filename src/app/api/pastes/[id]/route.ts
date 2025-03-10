@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPaste, deletePaste } from '@/lib/services/paste-service';
-import { getPasteSchema, deletePasteSchema } from '@/lib/validations';
+import { getPaste } from '@/lib/services/paste-service';
+import { getPasteSchema } from '@/lib/validations';
 
 /**
  * GET /api/pastes/[id] - Retrieves a paste by ID with optional password authentication
@@ -68,42 +68,4 @@ export async function GET(
   }
 }
 
-/**
- * DELETE /api/pastes/[id] - Permanently deletes a paste by ID
- */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    
-    const result = deletePasteSchema.safeParse({
-      id,
-    });
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid request', details: result.error.format() },
-        { status: 400 }
-      );
-    }
-
-    await deletePaste(id);
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    if (error instanceof Error && error.message === 'Paste not found') {
-      return NextResponse.json(
-        { error: 'Paste not found' },
-        { status: 404 }
-      );
-    }
-
-    console.error('Error deleting paste:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete paste' },
-      { status: 500 }
-    );
-  }
-}
+// DELETE endpoint removed for security reasons

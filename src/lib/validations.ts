@@ -26,12 +26,8 @@ export const getPasteSchema = z.object({
   password: z.string().optional(),
 });
 
-// Schema for paste deletion validation
-export const deletePasteSchema = z.object({
-  id: z.string().min(1, 'Paste ID is required'),
-});
+// Paste deletion functionality removed for security reasons
 
 // TypeScript types derived from Zod schemas
 export type CreatePasteInput = z.infer<typeof createPasteSchema>;
 export type GetPasteInput = z.infer<typeof getPasteSchema>;
-export type DeletePasteInput = z.infer<typeof deletePasteSchema>;
