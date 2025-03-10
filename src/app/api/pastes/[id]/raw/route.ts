@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { comparePassword } from '@/lib/utils/password-utils';
 import { decompressText } from '@/lib/utils/compression';
+import { Paste } from '@prisma/client';
+
+// Extended Paste type to ensure TypeScript recognizes all fields
+interface PasteWithBurnAfterRead extends Paste {
+  burnAfterRead: boolean;
+}
 
 // In-memory cache to prevent duplicate view counts (paste ID -> timestamp)
 const recentViews = new Map<string, number>();
@@ -9,11 +15,10 @@ const VIEW_DEBOUNCE_WINDOW = 2000; // 2 seconds
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = await context.params;
-    const id = params.id;
+    const { id } = await params;
     
     const password = request.nextUrl.searchParams.get('password');
     
@@ -70,8 +75,8 @@ export async function GET(
     // Check for burn-after-reading confirmation
     const confirmBurn = request.nextUrl.searchParams.get('confirm') === 'true';
     
-    // Type assertion for burnAfterRead field
-    const isBurnAfterRead = (paste as any).burnAfterRead;
+    // Access burnAfterRead field with proper typing
+    const isBurnAfterRead = (paste as PasteWithBurnAfterRead).burnAfterRead;
     
     if (isBurnAfterRead && !confirmBurn) {
       return new NextResponse(
@@ -89,7 +94,7 @@ export async function GET(
     }
     
     // Delete burn-after-reading paste asynchronously if confirmed
-    if ((paste as any).burnAfterRead && confirmBurn) {
+    if ((paste as PasteWithBurnAfterRead).burnAfterRead && confirmBurn) {
       prisma.paste.delete({
         where: { id },
       }).catch(err => console.error('Error deleting burn-after-read paste:', err));
@@ -102,7 +107,7 @@ export async function GET(
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0',
-        'X-Burn-After-Reading': (paste as any).burnAfterRead ? 'true' : 'false',
+        'X-Burn-After-Reading': (paste as PasteWithBurnAfterRead).burnAfterRead ? 'true' : 'false',
       },
     });
   } catch (error) {

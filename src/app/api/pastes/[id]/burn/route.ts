@@ -8,11 +8,10 @@ import { deletePaste } from '@/lib/services/paste-service';
  */
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = await context.params;
-    const id = params.id;
+    const { id } = await params;
     
     const paste = await prisma.paste.findUnique({
       where: { id },

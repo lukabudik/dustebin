@@ -7,7 +7,7 @@ import { getPasteSchema, deletePasteSchema } from '@/lib/validations';
  */
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get password from headers or query params
@@ -15,8 +15,7 @@ export async function GET(
                      new URL(request.url).searchParams.get('password') || 
                      undefined;
                      
-    const params = await context.params;
-    const id = params.id;
+    const { id } = await params;
 
     const result = getPasteSchema.safeParse({
       id,
@@ -74,11 +73,10 @@ export async function GET(
  */
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = await context.params;
-    const id = params.id;
+    const { id } = await params;
     
     const result = deletePasteSchema.safeParse({
       id,
