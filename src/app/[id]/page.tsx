@@ -79,9 +79,6 @@ export default function PastePage() {
     setRequiresPassword(false);
   };
 
-  // Deletion is handled by the PasteView component (redirects to home page)
-  const handleDelete = () => {};
-
   if (isLoading) {
     return (
       <div className="py-8">
@@ -131,7 +128,7 @@ export default function PastePage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-6.5rem)]">
-      <PasteView paste={paste} onDelete={handleDelete} />
+      <PasteView paste={paste} />
     </div>
   );
 }
