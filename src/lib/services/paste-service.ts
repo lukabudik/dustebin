@@ -4,6 +4,12 @@ import { formatCode, isFormattable } from '../utils/code-formatter';
 import { hashPassword, comparePassword } from '../utils/password-utils';
 import { shouldCompress, compressText, decompressText } from '../utils/compression';
 import { CreatePasteInput, GetPasteInput } from '../validations';
+import { Paste } from '@prisma/client';
+
+// Extended Paste type to ensure TypeScript recognizes all fields
+interface PasteWithBurnAfterRead extends Paste {
+  burnAfterRead: boolean;
+}
 
 // In-memory cache to prevent duplicate view counts (paste ID -> timestamp)
 const recentViews = new Map<string, number>();
@@ -126,15 +132,19 @@ export async function getPaste(data: GetPasteInput) {
       finalContent = await decompressText(compressedBuffer);
     }
 
+    // Cast to PasteWithBurnAfterRead to ensure TypeScript recognizes the burnAfterRead field
+    const typedPaste = paste as PasteWithBurnAfterRead;
+    const typedUpdatedPaste = updatedPaste as PasteWithBurnAfterRead;
+    
     return {
-      id: paste.id,
+      id: typedPaste.id,
       content: finalContent,
-      language: paste.language,
-      createdAt: paste.createdAt,
-      expiresAt: paste.expiresAt,
-      hasPassword: !!paste.passwordHash,
-      views: updatedPaste.views,
-      burnAfterRead: paste.burnAfterRead,
+      language: typedPaste.language,
+      createdAt: typedPaste.createdAt,
+      expiresAt: typedPaste.expiresAt,
+      hasPassword: !!typedPaste.passwordHash,
+      views: typedUpdatedPaste.views,
+      burnAfterRead: typedPaste.burnAfterRead,
     };
   } catch (error) {
     console.error('Error getting paste:', error);
