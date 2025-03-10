@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 // PrismaClient is attached to the global object in development to prevent
 // exhausting database connection limit
@@ -19,15 +19,7 @@ if (!globalForPrisma.prisma) {
   globalForPrisma.lastCleanupTime = Date.now();
   const CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
   
-  type MiddlewareParams = {
-    action: string;
-    model: string;
-    args: Record<string, unknown>;
-    dataPath: string[];
-    runInTransaction: boolean;
-  };
-  
-  prisma.$use(async (params: MiddlewareParams, next: (params: MiddlewareParams) => Promise<unknown>) => {
+  prisma.$use(async (params: Prisma.MiddlewareParams, next: (params: Prisma.MiddlewareParams) => Promise<unknown>) => {
     // Run cleanup occasionally on read operations to minimize impact
     if (
       (params.action === 'findUnique' || params.action === 'findMany') && 
@@ -43,8 +35,8 @@ if (!globalForPrisma.prisma) {
           expiresAt: {
             lt: new Date()
           }
-        },
-        take: 1000
+        }
+        // Removed 'take' parameter as it's not supported in deleteMany
       }).then((result: { count: number }) => {
         if (result.count > 0) {
           console.log(`Background cleanup: Deleted ${result.count} expired pastes`);
