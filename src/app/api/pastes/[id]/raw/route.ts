@@ -65,11 +65,12 @@ export async function GET(
       });
       
       if (recentViews.size > 1000) {
-        for (const [entryId, timestamp] of recentViews.entries()) {
+        // Convert entries to array before iterating to avoid TypeScript issues
+        Array.from(recentViews.entries()).forEach(([entryId, timestamp]) => {
           if (now - timestamp > VIEW_DEBOUNCE_WINDOW * 10) {
             recentViews.delete(entryId);
           }
-        }
+        });
       }
     }
     
@@ -104,7 +105,7 @@ export async function GET(
     if (paste.burnAfterRead && confirmBurn) {
       prisma.paste.delete({
         where: { id },
-      }).catch(err => console.error('Error deleting burn-after-read paste:', err));
+      }).catch((err: Error) => console.error('Error deleting burn-after-read paste:', err));
     }
     
     return new NextResponse(finalContent, {

@@ -125,11 +125,12 @@ export async function getPaste(data: GetPasteInput) {
       
       // Clean up cache if it grows too large
       if (recentViews.size > 1000) {
-        for (const [entryId, timestamp] of recentViews.entries()) {
+        // Convert entries to array before iterating to avoid TypeScript issues
+        Array.from(recentViews.entries()).forEach(([entryId, timestamp]) => {
           if (now - timestamp > VIEW_DEBOUNCE_WINDOW * 10) {
             recentViews.delete(entryId);
           }
-        }
+        });
       }
     }
 
