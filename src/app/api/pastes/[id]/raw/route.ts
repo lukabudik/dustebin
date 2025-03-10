@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { comparePassword } from '@/lib/utils/password-utils';
 import { decompressText } from '@/lib/utils/compression';
-import { Paste } from '@prisma/client';
 
-// Extended Paste type to ensure TypeScript recognizes all fields
-interface PasteWithBurnAfterRead extends Paste {
+// Define the Paste interface based on the Prisma schema
+interface Paste {
+  id: string;
+  content: string;
+  language: string;
+  createdAt: Date;
+  expiresAt: Date | null;
+  isCompressed: boolean;
+  passwordHash: string | null;
+  views: number;
   burnAfterRead: boolean;
 }
 
@@ -24,7 +31,7 @@ export async function GET(
     
     const paste = await prisma.paste.findUnique({
       where: { id },
-    });
+    }) as Paste;
     
     if (!paste) {
       return new NextResponse('Paste not found', { status: 404 });
@@ -75,8 +82,8 @@ export async function GET(
     // Check for burn-after-reading confirmation
     const confirmBurn = request.nextUrl.searchParams.get('confirm') === 'true';
     
-    // Access burnAfterRead field with proper typing
-    const isBurnAfterRead = (paste as PasteWithBurnAfterRead).burnAfterRead;
+    // Access burnAfterRead field
+    const isBurnAfterRead = paste.burnAfterRead;
     
     if (isBurnAfterRead && !confirmBurn) {
       return new NextResponse(
@@ -94,7 +101,7 @@ export async function GET(
     }
     
     // Delete burn-after-reading paste asynchronously if confirmed
-    if ((paste as PasteWithBurnAfterRead).burnAfterRead && confirmBurn) {
+    if (paste.burnAfterRead && confirmBurn) {
       prisma.paste.delete({
         where: { id },
       }).catch(err => console.error('Error deleting burn-after-read paste:', err));
@@ -107,7 +114,7 @@ export async function GET(
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0',
-        'X-Burn-After-Reading': (paste as PasteWithBurnAfterRead).burnAfterRead ? 'true' : 'false',
+        'X-Burn-After-Reading': paste.burnAfterRead ? 'true' : 'false',
       },
     });
   } catch (error) {

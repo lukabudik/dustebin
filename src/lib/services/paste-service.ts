@@ -4,10 +4,17 @@ import { formatCode, isFormattable } from '../utils/code-formatter';
 import { hashPassword, comparePassword } from '../utils/password-utils';
 import { shouldCompress, compressText, decompressText } from '../utils/compression';
 import { CreatePasteInput, GetPasteInput } from '../validations';
-import { Paste } from '@prisma/client';
 
-// Extended Paste type to ensure TypeScript recognizes all fields
-interface PasteWithBurnAfterRead extends Paste {
+// Define the Paste interface based on the Prisma schema
+interface Paste {
+  id: string;
+  content: string;
+  language: string;
+  createdAt: Date;
+  expiresAt: Date | null;
+  isCompressed: boolean;
+  passwordHash: string | null;
+  views: number;
   burnAfterRead: boolean;
 }
 
@@ -132,9 +139,9 @@ export async function getPaste(data: GetPasteInput) {
       finalContent = await decompressText(compressedBuffer);
     }
 
-    // Cast to PasteWithBurnAfterRead to ensure TypeScript recognizes the burnAfterRead field
-    const typedPaste = paste as PasteWithBurnAfterRead;
-    const typedUpdatedPaste = updatedPaste as PasteWithBurnAfterRead;
+    // Cast to Paste to ensure TypeScript recognizes all fields
+    const typedPaste = paste as Paste;
+    const typedUpdatedPaste = updatedPaste as Paste;
     
     return {
       id: typedPaste.id,
