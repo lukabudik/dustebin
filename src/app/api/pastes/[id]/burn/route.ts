@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { deletePaste } from '@/lib/services/paste-service';
+import { deletePaste } from '@/lib/services/paste-service'; // Used for burn-after-reading functionality
 
 /**
  * POST /api/pastes/[id]/burn - Deletes a burn-after-reading paste
