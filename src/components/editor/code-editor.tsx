@@ -134,7 +134,7 @@ export function CodeEditor({
     }
     
     setExtensions([langExtension, customStyles]);
-  }, [language, showSyntaxHighlighting, theme]);
+  }, [language, showSyntaxHighlighting, theme, customStyles]);
 
   // Only render CodeMirror on the client
   useEffect(() => {
