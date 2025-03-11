@@ -56,10 +56,19 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copy Next.js output if it exists
+# Copy Next.js output
 RUN mkdir -p .next/static
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./ || true
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static || true
+# Create a script to copy files if they exist
+RUN echo '#!/bin/bash\n\
+if [ -d "/builder/.next/standalone" ]; then\n\
+  cp -r /builder/.next/standalone/* .\n\
+fi\n\
+if [ -d "/builder/.next/static" ]; then\n\
+  cp -r /builder/.next/static/* ./.next/static/\n\
+fi' > /tmp/copy-next.sh && chmod +x /tmp/copy-next.sh
+# Mount the builder directory and run the script
+COPY --from=builder /app /builder
+RUN /tmp/copy-next.sh
 
 # Set the correct permissions
 USER nextjs
