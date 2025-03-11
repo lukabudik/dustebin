@@ -1,0 +1,25 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# they will be requested for review when someone opens a pull request.
+* @yourusername
+
+# Backend API routes
+/src/app/api/ @yourusername
+
+# Database and Prisma
+/prisma/ @yourusername
+/src/lib/db.ts @yourusername
+
+# Frontend components
+/src/components/ @yourusername
+
+# Configuration files
+*.json @yourusername
+*.ts @yourusername
+*.js @yourusername
+
+# Documentation
+*.md @yourusername
+
+# GitHub specific files
+/.github/ @yourusername

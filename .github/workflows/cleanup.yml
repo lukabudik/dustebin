@@ -1,0 +1,21 @@
+name: Scheduled Cleanup
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup expired pastes
+        run: |
+          curl -X POST ${{ secrets.DUSTEBIN_URL }}/api/admin/cleanup \
+          -H "Authorization: Bearer ${{ secrets.CLEANUP_API_KEY }}" \
+          -H "Content-Type: application/json"
+        env:
+          DUSTEBIN_URL: ${{ secrets.DUSTEBIN_URL }}
+          CLEANUP_API_KEY: ${{ secrets.CLEANUP_API_KEY }}
