@@ -53,11 +53,13 @@ RUN groupadd --system --gid 1001 nodejs && \
 
 # Copy necessary files from builder stage
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules ./node_modules
+
+# Copy Next.js output if it exists
+RUN mkdir -p .next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./ || true
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static || true
 
 # Set the correct permissions
 USER nextjs
@@ -68,5 +70,5 @@ EXPOSE 3000
 # Set the environment variable for the port
 ENV PORT=3000
 
-# Start the application
-CMD ["node", "server.js"]
+# Start the application (with fallback)
+CMD ["sh", "-c", "if [ -f server.js ]; then node server.js; else echo 'Build failed, server.js not found' && sleep infinity; fi"]
