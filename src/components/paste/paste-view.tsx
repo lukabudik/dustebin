@@ -75,7 +75,7 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
           eventSource.onmessage = event => {
             try {
               const data = JSON.parse(event.data);
-              console.log('SSE message received:', data);
+              console.warn('SSE message received:', data);
 
               if (data.status === 'completed') {
                 // Update the UI with the generated metadata
@@ -93,7 +93,7 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
                 data.status === 'timeout'
               ) {
                 // Handle failure gracefully
-                console.log('Metadata generation failed or timed out');
+                console.warn('Metadata generation failed or timed out');
                 setIsLoadingMetadata(false);
                 eventSource.close();
               }
