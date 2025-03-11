@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="container mb-16 min-h-[calc(100vh-6.5rem)] py-8">
-      <div className="mx-auto max-w-3xl pb-16">
+    <div className="container flex h-[calc(100vh-6.5rem)] flex-col overflow-hidden py-8">
+      <div className="mx-auto max-w-3xl flex-1 overflow-y-auto">
         <h1 className="mb-6 text-3xl font-bold">Terms of Service</h1>
 
         <Card className="mb-8">
