@@ -32,6 +32,7 @@
     "@codemirror/language": "^6.10.8",
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.36.4",
+    "@google/generative-ai": "^0.24.0",
     "@prettier/plugin-xml": "^3.4.1",
     "@prisma/client": "^6.4.1",
     "@radix-ui/react-dialog": "^1.1.6",
