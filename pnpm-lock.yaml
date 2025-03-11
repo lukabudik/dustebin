@@ -41,6 +41,9 @@ dependencies:
   '@codemirror/view':
     specifier: ^6.36.4
     version: 6.36.4
+  '@google/generative-ai':
+    specifier: ^0.24.0
+    version: 0.24.0
   '@prettier/plugin-xml':
     specifier: ^3.4.1
     version: 3.4.1(prettier@3.5.3)
@@ -835,6 +838,11 @@ packages:
 
   /@floating-ui/utils@0.2.9:
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+    dev: false
+
+  /@google/generative-ai@0.24.0:
+    resolution: {integrity: sha512-fnEITCGEB7NdX0BhoYZ/cq/7WPZ1QS5IzJJfC3Tg/OwkvBetMiVJciyaan297OvE4B9Jg1xvo0zIazX/9sGu1Q==}
+    engines: {node: '>=18.0.0'}
     dev: false
 
   /@humanfs/core@0.19.1:

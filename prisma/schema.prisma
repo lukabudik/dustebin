@@ -17,12 +17,15 @@ model Paste {
   id         String    @id @default(cuid())
   content    String
   language   String    @default("plaintext")
+  title      String?
+  description String?
   createdAt  DateTime  @default(now()) @map("created_at")
   expiresAt  DateTime? @map("expires_at")
   isCompressed Boolean @default(false) @map("is_compressed")
   passwordHash String?  @map("password_hash")
   views      Int       @default(0)
   burnAfterRead Boolean @default(false) @map("burn_after_read")
+  aiGenerationStatus String? @default("PENDING") @map("ai_generation_status")
 
   @@map("pastes")
   @@index([language])

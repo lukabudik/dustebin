@@ -16,6 +16,8 @@
 - **🔍 Syntax Highlighting**: Automatic language detection for multiple programming languages
 - **⏱️ Expiration Control**: Set pastes to expire after 1 hour, 1 day, 7 days, or 30 days
 - **🗜️ Content Compression**: Efficient storage with Brotli compression
+- **🤖 AI-Generated Metadata**: Automatic title and description generation using Google's Gemini API
+- **🔄 Real-time Updates**: Server-Sent Events (SSE) for live metadata generation status
 - **📱 Responsive Design**: Works seamlessly on desktop and mobile devices
 - **🌙 Dark Mode**: Automatic theme based on system preferences
 - **🔄 No Registration**: Create and share pastes without an account
@@ -42,6 +44,26 @@
 - **Validation**: Zod for robust schema validation
 - **Compression**: Brotli algorithm for efficient content storage
 - **Authentication**: Password hashing with bcrypt for protected pastes
+- **AI**: Google's Gemini API for generating titles and descriptions
+- **Real-time Updates**: Server-Sent Events (SSE) for live status updates
+
+## 🤖 AI-Generated Metadata
+
+Dustebin uses Google's Gemini API to automatically generate titles and descriptions for pastes:
+
+- **Asynchronous Processing**: Metadata is generated in the background after paste creation
+- **Real-time Updates**: Status updates are delivered via Server-Sent Events (SSE)
+- **Language-Aware**: Generates context-appropriate titles and descriptions based on the code language
+- **Fallback Handling**: Graceful degradation if the AI service is unavailable
+
+### Server-Sent Events (SSE)
+
+The application uses SSE to provide real-time updates on metadata generation:
+
+- **Live Status Updates**: Clients receive updates as metadata generation progresses
+- **Efficient Communication**: One-way server-to-client communication without polling
+- **Graceful Timeouts**: Automatic connection management with appropriate timeouts
+- **Error Handling**: Robust error handling for failed connections or generation issues
 
 ## 🏁 Getting Started
 
@@ -70,8 +92,14 @@ pnpm install
 
 ```bash
 cp .env.example .env
-# Edit .env with your database credentials and API key
+# Edit .env with your database credentials and API keys
 ```
+
+Required environment variables:
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `CLEANUP_API_KEY`: API key for the admin cleanup endpoint
+- `GEMINI_API_KEY`: Google Gemini API key for AI-generated titles and descriptions
 
 4. **Set up the database**
 
@@ -214,7 +242,12 @@ dustebin/
   - Returns: Plain text content
 
 - `POST /api/pastes/[id]/burn` - Burn a paste after reading
+
   - Returns: `{ success: true, message: 'Paste has been burned' }`
+
+- `GET /api/pastes/[id]/metadata` - Get real-time metadata generation status via SSE
+  - Returns: Server-Sent Events with status updates (`pending`, `completed`, `failed`, etc.)
+  - When completed, includes generated title and description
 
 ### Languages
 
