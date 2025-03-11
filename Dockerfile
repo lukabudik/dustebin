@@ -6,7 +6,7 @@ FROM base AS deps
 WORKDIR /app
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm
 
 # Copy package.json and related files
 COPY package.json pnpm-lock.yaml* ./
