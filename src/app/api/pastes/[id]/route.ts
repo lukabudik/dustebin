@@ -7,15 +7,16 @@ import { getPasteSchema } from '@/lib/validations';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> & { id: string } }
 ) {
   try {
     // Get password from headers or query params
-    const password = request.headers.get('X-Password') || 
-                     new URL(request.url).searchParams.get('password') || 
-                     undefined;
-                     
-    const { id } = await params;
+    const password =
+      request.headers.get('X-Password') ||
+      new URL(request.url).searchParams.get('password') ||
+      undefined;
+
+    const id = params.id;
 
     const result = getPasteSchema.safeParse({
       id,
@@ -34,37 +35,25 @@ export async function GET(
     return NextResponse.json(paste, {
       headers: {
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     });
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Paste not found') {
-        return NextResponse.json(
-          { error: 'Paste not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'Paste not found' }, { status: 404 });
       }
       if (error.message === 'Paste has expired') {
-        return NextResponse.json(
-          { error: 'Paste has expired' },
-          { status: 410 }
-        );
+        return NextResponse.json({ error: 'Paste has expired' }, { status: 410 });
       }
       if (error.message === 'Incorrect password') {
-        return NextResponse.json(
-          { error: 'Incorrect password' },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
       }
     }
 
     console.error('Error getting paste:', error);
-    return NextResponse.json(
-      { error: 'Failed to get paste' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to get paste' }, { status: 500 });
   }
 }
 

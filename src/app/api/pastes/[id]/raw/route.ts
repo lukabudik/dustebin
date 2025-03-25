@@ -23,9 +23,12 @@ interface Paste {
 const recentViews = new Map<string, number>();
 const VIEW_DEBOUNCE_WINDOW = 2000;
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> & { id: string } }
+) {
   try {
-    const { id } = await params;
+    const id = params.id;
 
     const password = request.nextUrl.searchParams.get('password');
 

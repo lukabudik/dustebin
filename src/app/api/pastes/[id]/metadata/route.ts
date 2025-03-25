@@ -26,8 +26,11 @@ interface PasteWithMetadata {
   aiGenerationStatus?: string;
 }
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: pasteId } = await params;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> & { id: string } }
+) {
+  const pasteId = params.id;
 
   // Set headers for SSE
   const headers = {

@@ -48,6 +48,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "exif-reader": "^2.0.2",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.479.0",
@@ -71,6 +72,7 @@
     "@eslint/eslintrc": "^3",
     "@shadcn/ui": "^0.0.4",
     "@tailwindcss/postcss": "^4",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -84,5 +86,10 @@
     "prisma": "^6.4.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "bcrypt"
+    ]
   }
 }

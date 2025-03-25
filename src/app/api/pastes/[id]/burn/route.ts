@@ -8,11 +8,11 @@ import { deletePaste } from '@/lib/services/paste-service'; // Used for burn-aft
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> & { id: string } }
 ) {
   try {
-    const { id } = await params;
-    
+    const id = params.id;
+
     const paste = await prisma.paste.findUnique({
       where: { id },
       select: {
@@ -20,32 +20,26 @@ export async function POST(
         burnAfterRead: true,
       },
     });
-    
+
     if (!paste) {
-      return NextResponse.json(
-        { error: 'Paste not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Paste not found' }, { status: 404 });
     }
-    
+
     if (!paste.burnAfterRead) {
       return NextResponse.json(
         { error: 'This paste is not configured for burn-after-reading' },
         { status: 400 }
       );
     }
-    
+
     await deletePaste(id);
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       success: true,
-      message: 'Paste has been burned'
+      message: 'Paste has been burned',
     });
   } catch (error) {
     console.error('Error burning paste:', error);
-    return NextResponse.json(
-      { error: 'Failed to burn paste' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to burn paste' }, { status: 500 });
   }
 }

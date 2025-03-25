@@ -176,7 +176,16 @@ export async function createPaste(data: CreatePasteInput) {
         burnAfterRead,
         aiGenerationStatus: 'PENDING',
         pasteType,
-        ...imageData,
+        hasImage: imageData.hasImage || false,
+        imageKey: imageData.imageKey,
+        imageUrl: imageData.imageUrl,
+        imageMimeType: imageData.imageMimeType,
+        imageSize: imageData.imageSize,
+        imageWidth: imageData.imageWidth,
+        imageHeight: imageData.imageHeight,
+        originalFormat: imageData.originalFormat,
+        originalMimeType: imageData.originalMimeType,
+        exifData: imageData.exifData ? JSON.parse(JSON.stringify(imageData.exifData)) : null,
       },
     });
 
