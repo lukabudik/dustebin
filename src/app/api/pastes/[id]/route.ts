@@ -16,7 +16,7 @@ export async function GET(
       new URL(request.url).searchParams.get('password') ||
       undefined;
 
-    const id = params.id;
+    const { id } = await params;
 
     const result = getPasteSchema.safeParse({
       id,

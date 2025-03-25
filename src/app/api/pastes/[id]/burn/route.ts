@@ -11,7 +11,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> & { id: string } }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
 
     const paste = await prisma.paste.findUnique({
       where: { id },

@@ -28,7 +28,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> & { id: string } }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
 
     const password = request.nextUrl.searchParams.get('password');
 

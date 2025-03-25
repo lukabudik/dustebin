@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> & { id: string } }
 ): Promise<NextResponse> {
   try {
-    const id = params.id;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'Paste ID is required' }, { status: 400 });
     }

@@ -30,7 +30,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> & { id: string } }
 ) {
-  const pasteId = params.id;
+  const { id: pasteId } = await params;
 
   // Set headers for SSE
   const headers = {
