@@ -12,8 +12,18 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Generates a short ID for pastes with appropriate file extension
  */
-export function generatePasteId(language: string = 'plaintext'): string {
+export function generatePasteId(
+  language: string = 'plaintext',
+  options?: { pasteType?: string; originalFormat?: string }
+): string {
   const id = nanoid(8);
+
+  // For image pastes, use the original format as the extension
+  if (options?.pasteType === 'image' && options?.originalFormat) {
+    return `${id}.${options.originalFormat}`;
+  }
+
+  // For text pastes, use the language extension
   const extension = getFileExtensionForLanguage(language);
   return extension ? `${id}.${extension}` : id;
 }
@@ -23,21 +33,21 @@ export function generatePasteId(language: string = 'plaintext'): string {
  */
 export function getFileExtensionForLanguage(language: string): string {
   const extensionMap: Record<string, string> = {
-    'javascript': 'js',
-    'typescript': 'ts',
-    'jsx': 'jsx',
-    'tsx': 'tsx',
-    'html': 'html',
-    'css': 'css',
-    'json': 'json',
-    'markdown': 'md',
-    'python': 'py',
-    'rust': 'rs',
-    'sql': 'sql',
-    'xml': 'xml',
-    'plaintext': 'txt',
+    javascript: 'js',
+    typescript: 'ts',
+    jsx: 'jsx',
+    tsx: 'tsx',
+    html: 'html',
+    css: 'css',
+    json: 'json',
+    markdown: 'md',
+    python: 'py',
+    rust: 'rs',
+    sql: 'sql',
+    xml: 'xml',
+    plaintext: 'txt',
   };
-  
+
   return extensionMap[language] || 'txt';
 }
 
@@ -62,7 +72,7 @@ export function calculateExpirationDate(option: string): Date | null {
   if (option === 'never' || option === 'burn') return null;
 
   const now = new Date();
-  
+
   switch (option) {
     case '1h':
       return new Date(now.getTime() + 60 * 60 * 1000);

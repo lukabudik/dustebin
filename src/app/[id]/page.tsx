@@ -20,6 +20,14 @@ interface Paste {
   requiresPassword?: boolean;
   burnAfterRead?: boolean;
   aiGenerationStatus?: string;
+  hasImage?: boolean;
+  imageUrl?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  originalFormat?: string;
+  originalMimeType?: string;
+  pasteType?: string;
+  exifData?: Record<string, unknown> | null;
 }
 
 export default function PastePage() {
@@ -31,12 +39,9 @@ export default function PastePage() {
   const [error, setError] = useState<string | null>(null);
   const [requiresPassword, setRequiresPassword] = useState(false);
 
-  // Track if we've already fetched the paste to prevent duplicate API calls
-  // (especially important in React strict mode during development)
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    // Skip if we've already fetched this paste
     if (hasFetchedRef.current) return;
 
     const fetchPaste = async () => {
@@ -60,7 +65,6 @@ export default function PastePage() {
 
         setPaste(data);
       } catch (error) {
-        console.error('Error fetching paste:', error);
         setError(error instanceof Error ? error.message : 'Failed to load paste');
         toast.error(error instanceof Error ? error.message : 'Failed to load paste');
       } finally {
@@ -70,7 +74,6 @@ export default function PastePage() {
 
     fetchPaste();
 
-    // Reset fetch tracking when ID changes
     return () => {
       hasFetchedRef.current = false;
     };

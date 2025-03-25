@@ -26,6 +26,19 @@ model Paste {
   views      Int       @default(0)
   burnAfterRead Boolean @default(false) @map("burn_after_read")
   aiGenerationStatus String? @default("PENDING") @map("ai_generation_status")
+  
+  // Image support
+  hasImage   Boolean   @default(false) @map("has_image")
+  imageKey   String?   @map("image_key") // R2 object key
+  imageUrl   String?   @map("image_url") // Public URL for the image
+  imageMimeType String? @map("image_mime_type")
+  imageSize  Int?      @map("image_size") // Size in bytes
+  imageWidth Int?      @map("image_width")
+  imageHeight Int?     @map("image_height")
+  originalFormat String? @map("original_format") // Original image format (e.g., 'png', 'jpeg')
+  originalMimeType String? @map("original_mime_type") // Original MIME type
+  exifData   Json?    @map("exif_data") // EXIF metadata from the image
+  pasteType  String    @default("text") @map("paste_type") // Type of paste: 'text' or 'image'
 
   @@map("pastes")
   @@index([language])
