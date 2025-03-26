@@ -155,6 +155,25 @@ export function PasteForm() {
           body: formData,
         });
 
+        // Handle rate limit responses
+        if (response.status === 429) {
+          const error = await response.json();
+          const resetTime = error.resetTime ? new Date(error.resetTime) : null;
+
+          // Format the reset time in a user-friendly way
+          const resetTimeStr = resetTime
+            ? resetTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : 'some time';
+
+          toast.error(`Rate limit reached. You can create more pastes after ${resetTimeStr}.`, {
+            duration: 8000,
+            description: error.message || 'Too many pastes created recently.',
+          });
+
+          setIsSubmitting(false);
+          return; // Keep user on the current page with their content preserved
+        }
+
         if (!response.ok) {
           const error = await response.json();
           throw new Error(error.error || 'Failed to create paste');
@@ -162,7 +181,33 @@ export function PasteForm() {
 
         const paste = await response.json();
 
-        toast.success('Paste created successfully!');
+        // Check remaining rate limits from headers
+        const remaining = response.headers.get('X-RateLimit-Remaining');
+        const limit = response.headers.get('X-RateLimit-Limit');
+        const resetTime = response.headers.get('X-RateLimit-Reset');
+
+        // Show success toast with rate limit info if available
+        if (remaining && limit) {
+          const remainingNum = parseInt(remaining, 10);
+
+          if (remainingNum <= 5) {
+            // If approaching limit, show warning
+            const resetDate = resetTime ? new Date(parseInt(resetTime, 10) * 1000) : null;
+            const resetTimeStr = resetDate
+              ? resetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+              : 'in an hour';
+
+            toast.success(`Paste created! You have ${remainingNum} pastes remaining.`, {
+              description: `Your rate limit will reset at ${resetTimeStr}.`,
+            });
+          } else {
+            // Normal success toast
+            toast.success('Paste created successfully!');
+          }
+        } else {
+          // Fallback if headers aren't available
+          toast.success('Paste created successfully!');
+        }
 
         router.push(`/${paste.id}`);
       } catch (error) {

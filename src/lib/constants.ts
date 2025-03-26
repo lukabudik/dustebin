@@ -32,5 +32,5 @@ export const MAX_PASTE_SIZE = 1024 * 1024;
 // Rate limiting configuration
 export const RATE_LIMIT = {
   MAX_REQUESTS_PER_MINUTE: 60, // Per IP address
-  MAX_PASTES_PER_HOUR: 20,     // Per IP address
+  MAX_PASTES_PER_HOUR: 30, // Per IP address
 };
