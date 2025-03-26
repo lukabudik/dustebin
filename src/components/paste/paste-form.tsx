@@ -328,36 +328,38 @@ export function PasteForm() {
       </div>
 
       <div className="flex flex-col border-b p-3 sm:p-4">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
-          <div className="w-full">
-            <Select value={expiration} onValueChange={setExpiration}>
-              <SelectTrigger id="expiration" className="w-full">
-                <SelectValue placeholder="Expiration" />
-              </SelectTrigger>
-              <SelectContent>
-                {EXPIRATION_OPTIONS.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <div className="w-full sm:w-44">
+              <Select value={expiration} onValueChange={setExpiration}>
+                <SelectTrigger id="expiration" className="h-10 w-full">
+                  <SelectValue placeholder="Expiration" />
+                </SelectTrigger>
+                <SelectContent>
+                  {EXPIRATION_OPTIONS.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="w-full">
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="border-input bg-background h-10 w-full rounded-md border px-3 py-2 text-sm"
-              placeholder="Password (optional)"
-              suppressHydrationWarning
-            />
+            <div className="w-full sm:w-44">
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="border-input bg-background h-10 w-full rounded-md border px-3 py-2 text-sm"
+                placeholder="Password (optional)"
+                suppressHydrationWarning
+              />
+            </div>
           </div>
 
           <div className="flex flex-col items-center sm:items-end">
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? (
                 <>
                   <svg
