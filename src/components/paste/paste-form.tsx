@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { CodeEditor } from '@/components/editor/code-editor';
+import { CodeEditor, CodeEditorRef } from '@/components/editor/code-editor';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -19,6 +19,7 @@ import { ImageIcon, X } from 'lucide-react';
 export function PasteForm() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<CodeEditorRef>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState('');
   const [language, setLanguage] = useState('plaintext');
@@ -219,8 +220,22 @@ export function PasteForm() {
     [content, image, language, expiration, password, pasteType, router]
   );
 
+  // Auto-focus the editor when the page loads
+  useEffect(() => {
+    // Small delay to ensure the editor is fully mounted
+    const timer = setTimeout(() => {
+      if (editorRef.current && pasteType === 'text') {
+        editorRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [pasteType]);
+
+  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Command+Enter or Ctrl+Enter to submit
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         handleSubmit();
       }
@@ -389,7 +404,7 @@ export function PasteForm() {
               )}
             </Button>
             <span className="text-muted-foreground mt-1 hidden text-xs sm:inline">
-              or press ⌘+Enter
+              or press {navigator.platform.includes('Mac') ? '⌘+Enter' : 'Ctrl+Enter'}
             </span>
           </div>
         </div>
@@ -399,6 +414,7 @@ export function PasteForm() {
         {pasteType === 'text' ? (
           <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
             <CodeEditor
+              ref={editorRef}
               value={content}
               onChange={setContent}
               language={language}

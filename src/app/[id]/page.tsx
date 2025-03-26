@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { PasteView } from '@/components/paste/paste-view';
 import { PasswordForm } from '@/components/paste/password-form';
@@ -39,7 +39,24 @@ export default function PastePage() {
   const [error, setError] = useState<string | null>(null);
   const [requiresPassword, setRequiresPassword] = useState(false);
 
+  const router = useRouter();
   const hasFetchedRef = useRef(false);
+
+  // Add keyboard shortcut for creating a new paste
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Command+N or Ctrl+N to create a new paste
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault(); // Prevent browser's default "new window" action
+        router.push('/');
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [router]);
 
   useEffect(() => {
     if (hasFetchedRef.current) return;

@@ -534,14 +534,19 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
             </>
           )}
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push('/')}
-          className="mt-3 w-full sm:mt-0 sm:w-auto"
-        >
-          New Paste
-        </Button>
+        <div className="flex flex-col items-center sm:items-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/')}
+            className="mt-3 w-full sm:mt-0 sm:w-auto"
+          >
+            New Paste
+          </Button>
+          <span className="text-muted-foreground mt-1 hidden text-xs sm:inline">
+            or press {navigator.platform.includes('Mac') ? '⌘+N' : 'Ctrl+N'}
+          </span>
+        </div>
       </div>
     </div>
   );
