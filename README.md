@@ -1,8 +1,8 @@
 # Dustebin
 
 <div align="center">
-  <h3>A modern, secure code sharing platform</h3>
-  <p>Share code snippets with syntax highlighting, privacy options, and self-destructing pastes</p>
+  <h3>A modern, secure code and image sharing platform</h3>
+  <p>Share code snippets and images with syntax highlighting, privacy options, and self-destructing content</p>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
   [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
@@ -21,6 +21,9 @@
 - **📱 Responsive Design**: Works seamlessly on desktop and mobile devices
 - **🌙 Dark Mode**: Automatic theme based on system preferences
 - **🔄 No Registration**: Create and share pastes without an account
+- **📷 Image Support**: Upload and share images with automatic compression
+- **🔍 EXIF Data Extraction**: View camera, photo, and location metadata from images
+- **🔄 Format Conversion**: Convert images between formats (JPEG, PNG, WebP, etc.)
 
 ## 🔗 Live Service
 
@@ -46,6 +49,9 @@
 - **Authentication**: Password hashing with bcrypt for protected pastes
 - **AI**: Google's Gemini API for generating titles and descriptions
 - **Real-time Updates**: Server-Sent Events (SSE) for live status updates
+- **Image Processing**: Sharp for image compression and format conversion
+- **EXIF Extraction**: exif-reader for extracting image metadata
+- **Storage**: Cloudflare R2 (S3-compatible) for image storage
 
 ## 🤖 AI-Generated Metadata
 
@@ -100,6 +106,11 @@ Required environment variables:
 - `DATABASE_URL`: PostgreSQL connection string
 - `CLEANUP_API_KEY`: API key for the admin cleanup endpoint
 - `GEMINI_API_KEY`: Google Gemini API key for AI-generated titles and descriptions
+- `R2_ACCOUNT_ID`: Cloudflare account ID for R2 storage
+- `R2_ACCESS_KEY_ID`: Access key ID for R2 storage
+- `R2_SECRET_ACCESS_KEY`: Secret access key for R2 storage
+- `R2_BUCKET_NAME`: Bucket name for R2 storage
+- `R2_PUBLIC_URL`: Public URL for R2 storage
 
 4. **Set up the database**
 
@@ -151,6 +162,35 @@ pnpm start
 ```
 
 Make sure to set up the environment variables in your production environment.
+
+## 📷 Image Support
+
+Dustebin allows users to share images with the same privacy and expiration features as text pastes:
+
+- **Image Upload**: Upload images up to 10MB in size
+- **Format Support**: JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and BMP
+- **Automatic Compression**: Images are automatically compressed to reduce size while maintaining quality
+- **Format Conversion**: Convert images between formats for download
+- **EXIF Data Extraction**: View camera information, photo details, and location data from images
+- **Privacy Protection**: EXIF data is only visible to those with access to the paste
+
+### EXIF Data Viewer
+
+The EXIF data viewer provides detailed information about images:
+
+- **Camera Information**: Make, model, software, and dimensions
+- **Photo Details**: Date taken, exposure time, aperture, ISO, and focal length
+- **Location Data**: GPS coordinates with Google Maps integration (if available)
+- **Privacy Controls**: EXIF data is only shown when explicitly requested
+
+### Image Processing
+
+Images are processed to ensure optimal performance and quality:
+
+- **Automatic Resizing**: Large images are resized to a maximum of 2000x2000 pixels
+- **Quality Optimization**: Images are compressed with optimal quality settings
+- **Format Preservation**: Original format is preserved while offering conversion options
+- **Efficient Storage**: Images are stored in Cloudflare R2 with appropriate caching headers
 
 ## 🔄 Scheduled Cleanup
 
@@ -227,14 +267,14 @@ dustebin/
 
 - `POST /api/pastes` - Create a new paste
 
-  - Body: `{ content, language, expiration, password? }`
-  - Returns: `{ id, language, createdAt, expiresAt, hasPassword }`
+  - Body: `{ content, language, expiration, password?, image?, pasteType?, originalFormat? }`
+  - Returns: `{ id, language, createdAt, expiresAt, hasPassword, hasImage?, imageUrl?, pasteType? }`
 
 - `GET /api/pastes/[id]` - Get a paste by ID
 
   - Headers: `X-Password` (optional)
   - Query: `password` (optional)
-  - Returns: Paste object with content
+  - Returns: Paste object with content or image URL
 
 - `GET /api/pastes/[id]/raw` - Get raw paste content
 
@@ -248,6 +288,21 @@ dustebin/
 - `GET /api/pastes/[id]/metadata` - Get real-time metadata generation status via SSE
   - Returns: Server-Sent Events with status updates (`pending`, `completed`, `failed`, etc.)
   - When completed, includes generated title and description
+
+### Images
+
+- `GET /api/pastes/[id]/image` - Get the image for a paste
+
+  - Query: `password` (optional)
+  - Returns: Image file
+
+- `GET /api/pastes/[id]/download` - Download an image in a specific format
+
+  - Query: `format` (original, jpg, png, webp), `password` (optional)
+  - Returns: Image file in the requested format
+
+- `GET /api/pastes/[id]/formats` - Get available image formats and sizes
+  - Returns: `{ formats: [{ id, name, size, extension }] }`
 
 ### Languages
 
