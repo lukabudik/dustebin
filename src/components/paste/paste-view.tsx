@@ -255,8 +255,8 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b p-4">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col border-b p-3 sm:p-4">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
           <div className="flex flex-col">
             <span className="text-sm font-medium">
               {paste.title ||
@@ -300,114 +300,133 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
                 ` • ${paste.imageWidth} × ${paste.imageHeight}`}
             </span>
           </div>
-        </div>
 
-        <div className="flex space-x-2">
-          {paste.pasteType === 'image' || paste.hasImage ? (
-            <>
-              <Button variant="outline" size="sm" onClick={handleCopyLink}>
-                Copy Link
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  if (paste.imageUrl) {
-                    window.open(paste.imageUrl, '_blank');
-                  }
-                }}
-              >
-                <ImageIcon className="mr-1 h-4 w-4" />
-                View Original
-              </Button>
-
-              {hasExifData && <ExifViewer exifData={paste.exifData} displayMode="button" />}
-
-              <div className="relative" ref={dropdownRef}>
+          <div className="flex flex-wrap gap-2">
+            {paste.pasteType === 'image' || paste.hasImage ? (
+              <>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center"
-                  onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+                  onClick={handleCopyLink}
+                  className="h-8 px-2 sm:px-3"
                 >
-                  {isLoadingFormats ? (
-                    <>
-                      <svg
-                        className="mr-1 h-4 w-4 animate-spin"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Calculating...
-                    </>
-                  ) : (
-                    <>
-                      <DownloadIcon className="mr-1 h-4 w-4" />
-                      Download
-                      <ChevronDownIcon className="ml-1 h-4 w-4" />
-                    </>
-                  )}
+                  Copy Link
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (paste.imageUrl) {
+                      window.open(paste.imageUrl, '_blank');
+                    }
+                  }}
+                  className="h-8 px-2 sm:px-3"
+                >
+                  <ImageIcon className="mr-1 h-4 w-4" />
+                  <span className="hidden sm:inline">View Original</span>
+                  <span className="sm:hidden">View</span>
                 </Button>
 
-                {showFormatDropdown && formatOptions.length > 0 && (
-                  <div className="ring-opacity-5 absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-none">
-                    <div className="py-1">
-                      {formatOptions.map(format => (
-                        <button
-                          key={format.id}
-                          className="flex w-full items-center justify-between px-4 py-2 text-left text-sm hover:bg-gray-100"
-                          onClick={() => {
-                            window.open(
-                              `/api/pastes/${paste.id}/download?format=${format.id}`,
-                              '_blank'
-                            );
-                            setShowFormatDropdown(false);
-                          }}
+                {hasExifData && <ExifViewer exifData={paste.exifData} displayMode="button" />}
+
+                <div className="relative" ref={dropdownRef}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex h-8 items-center px-2 sm:px-3"
+                    onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+                  >
+                    {isLoadingFormats ? (
+                      <>
+                        <svg
+                          className="mr-1 h-4 w-4 animate-spin"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
                         >
-                          <span>{format.name}</span>
-                          <span className="text-muted-foreground text-xs">{format.size}</span>
-                        </button>
-                      ))}
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span className="hidden sm:inline">Calculating...</span>
+                        <span className="sm:hidden">...</span>
+                      </>
+                    ) : (
+                      <>
+                        <DownloadIcon className="mr-1 h-4 w-4" />
+                        <span className="hidden sm:inline">Download</span>
+                        <ChevronDownIcon className="ml-1 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+
+                  {showFormatDropdown && formatOptions.length > 0 && (
+                    <div className="ring-opacity-5 absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-none">
+                      <div className="py-1">
+                        {formatOptions.map(format => (
+                          <button
+                            key={format.id}
+                            className="flex w-full items-center justify-between px-4 py-2 text-left text-sm hover:bg-gray-100"
+                            onClick={() => {
+                              window.open(
+                                `/api/pastes/${paste.id}/download?format=${format.id}`,
+                                '_blank'
+                              );
+                              setShowFormatDropdown(false);
+                            }}
+                          >
+                            <span>{format.name}</span>
+                            <span className="text-muted-foreground text-xs">{format.size}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              <Button variant="outline" size="sm" onClick={handleCopyLink}>
-                Copy Link
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleCopyContent}>
-                Copy Content
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => window.open(`/api/pastes/${paste.id}/raw`, '_blank')}
-              >
-                View Raw
-              </Button>
-            </>
-          )}
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyLink}
+                  className="h-8 px-2 sm:px-3"
+                >
+                  Copy Link
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyContent}
+                  className="h-8 px-2 sm:px-3"
+                >
+                  Copy Content
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(`/api/pastes/${paste.id}/raw`, '_blank')}
+                  className="h-8 px-2 sm:px-3"
+                >
+                  View Raw
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-4 pb-8">
+      <div className="flex-1 overflow-auto p-3 pb-6 sm:p-4 sm:pb-8">
         {paste.burnAfterRead && (
           <div className="bg-destructive/10 text-destructive mb-4 rounded-md p-3">
             <div className="flex items-center">
@@ -426,7 +445,7 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
               <img
                 src={paste.imageUrl}
                 alt=""
-                className="max-h-[600px] w-full object-contain"
+                className="max-h-[300px] w-full object-contain sm:max-h-[600px]"
                 loading="lazy"
               />
             </div>
@@ -495,7 +514,7 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
         )}
       </div>
 
-      <div className="flex items-center justify-between border-t p-4">
+      <div className="flex flex-col border-t p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
         <div className="flex items-center">
           {paste.pasteType === 'image' || paste.hasImage ? (
             <>
@@ -515,7 +534,12 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
             </>
           )}
         </div>
-        <Button variant="outline" size="sm" onClick={() => router.push('/')}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => router.push('/')}
+          className="mt-3 w-full sm:mt-0 sm:w-auto"
+        >
           New Paste
         </Button>
       </div>

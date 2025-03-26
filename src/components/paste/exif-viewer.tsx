@@ -266,7 +266,7 @@ export function ExifViewer({ exifData, displayMode = 'badge' }: ExifViewerProps)
             {getKeyInfo()}
           </div>
         </DialogTrigger>
-        <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-2xl">
+        <DialogContent className="max-h-[90vh] w-[95vw] max-w-md overflow-y-auto p-4 sm:max-h-[80vh] sm:max-w-2xl md:p-6">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <InfoIcon className="mr-2 h-5 w-5" />
@@ -274,12 +274,22 @@ export function ExifViewer({ exifData, displayMode = 'badge' }: ExifViewerProps)
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4">{renderExifContent()}</div>
-          <div className="mt-6 flex justify-end">
-            <Button variant="outline" size="sm" onClick={copyExifData} className="mr-2">
+          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={copyExifData}
+              className="w-full sm:mr-2 sm:w-auto"
+            >
               <ClipboardCopyIcon className="mr-1.5 h-4 w-4" />
               Copy EXIF Data
             </Button>
-            <Button variant="secondary" size="sm" onClick={() => setIsDialogOpen(false)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsDialogOpen(false)}
+              className="w-full sm:w-auto"
+            >
               Close
             </Button>
           </div>
@@ -292,12 +302,13 @@ export function ExifViewer({ exifData, displayMode = 'badge' }: ExifViewerProps)
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="h-8 px-2 sm:px-3">
             <InfoIcon className="mr-1.5 h-4 w-4" />
-            View EXIF Data
+            <span className="hidden sm:inline">View EXIF Data</span>
+            <span className="sm:hidden">EXIF</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-2xl">
+        <DialogContent className="max-h-[90vh] w-[95vw] max-w-md overflow-y-auto p-4 sm:max-h-[80vh] sm:max-w-2xl md:p-6">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <InfoIcon className="mr-2 h-5 w-5" />
@@ -305,12 +316,22 @@ export function ExifViewer({ exifData, displayMode = 'badge' }: ExifViewerProps)
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4">{renderExifContent()}</div>
-          <div className="mt-6 flex justify-end">
-            <Button variant="outline" size="sm" onClick={copyExifData} className="mr-2">
+          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={copyExifData}
+              className="w-full sm:mr-2 sm:w-auto"
+            >
               <ClipboardCopyIcon className="mr-1.5 h-4 w-4" />
               Copy EXIF Data
             </Button>
-            <Button variant="secondary" size="sm" onClick={() => setIsDialogOpen(false)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsDialogOpen(false)}
+              className="w-full sm:w-auto"
+            >
               Close
             </Button>
           </div>
@@ -363,8 +384,8 @@ export function ExifViewer({ exifData, displayMode = 'badge' }: ExifViewerProps)
       </div>
 
       {isExpanded && (
-        <div id="exif-content" className="border-t p-3">
-          {renderExifContent()}
+        <div id="exif-content" className="overflow-x-auto border-t p-3">
+          <div className="min-w-[300px]">{renderExifContent()}</div>
         </div>
       )}
     </div>

@@ -194,97 +194,99 @@ export function PasteForm() {
       suppressHydrationWarning
       onPaste={handlePaste}
     >
-      <div className="flex items-center justify-between border-b p-4">
-        <div className="flex items-center space-x-4">
-          <div className="flex rounded-md border">
-            <Button
-              type="button"
-              variant={pasteType === 'text' ? 'default' : 'outline'}
-              className="flex items-center rounded-r-none"
-              onClick={() => {
-                setPasteType('text');
-                if (image) {
-                  handleRemoveImage();
-                }
-              }}
-            >
-              <svg
-                className="mr-1 h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      <div className="flex flex-col border-b p-3 sm:p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex rounded-md border">
+              <Button
+                type="button"
+                variant={pasteType === 'text' ? 'default' : 'outline'}
+                className="flex items-center rounded-r-none px-2 sm:px-3"
+                onClick={() => {
+                  setPasteType('text');
+                  if (image) {
+                    handleRemoveImage();
+                  }
+                }}
               >
-                <path
-                  d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M7 9H17"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M7 13H17"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M7 17H13"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Text
-            </Button>
-            <Button
-              type="button"
-              variant={pasteType === 'image' ? 'default' : 'outline'}
-              className="flex items-center rounded-l-none"
-              onClick={() => {
-                setPasteType('image');
-                if (content) {
-                  setContent('');
-                }
-              }}
-            >
-              <ImageIcon className="mr-1 h-4 w-4" />
-              Image
-            </Button>
+                <svg
+                  className="mr-1 h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7 9H17"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7 13H17"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M7 17H13"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Text
+              </Button>
+              <Button
+                type="button"
+                variant={pasteType === 'image' ? 'default' : 'outline'}
+                className="flex items-center rounded-l-none px-2 sm:px-3"
+                onClick={() => {
+                  setPasteType('image');
+                  if (content) {
+                    setContent('');
+                  }
+                }}
+              >
+                <ImageIcon className="mr-1 h-4 w-4" />
+                Image
+              </Button>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="image-upload"
+              accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/avif,image/tiff,image/bmp"
+              onChange={handleImageChange}
+              className="hidden"
+            />
           </div>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            id="image-upload"
-            accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/avif,image/tiff,image/bmp"
-            onChange={handleImageChange}
-            className="hidden"
-          />
-        </div>
-
-        <div>
-          <span className="text-muted-foreground text-xs">
-            {pasteType === 'text'
-              ? 'Share code snippets, logs, or any text'
-              : 'Share images up to 10MB'}
-          </span>
+          <div>
+            <span className="text-muted-foreground text-xs">
+              {pasteType === 'text'
+                ? 'Share code snippets, logs, or any text'
+                : 'Share images up to 10MB'}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-b p-4">
-        <div className="flex items-center space-x-4">
-          <div>
+      <div className="flex flex-col border-b p-3 sm:p-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
+          <div className="w-full">
             <Select value={expiration} onValueChange={setExpiration}>
-              <SelectTrigger id="expiration" className="w-40">
+              <SelectTrigger id="expiration" className="w-full">
                 <SelectValue placeholder="Expiration" />
               </SelectTrigger>
               <SelectContent>
@@ -297,54 +299,56 @@ export function PasteForm() {
             </Select>
           </div>
 
-          <div>
+          <div className="w-full">
             <input
               id="password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="border-input bg-background h-10 w-40 rounded-md border px-3 py-2 text-sm"
+              className="border-input bg-background h-10 w-full rounded-md border px-3 py-2 text-sm"
               placeholder="Password (optional)"
               suppressHydrationWarning
             />
           </div>
-        </div>
 
-        <div className="flex flex-col items-end">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <svg
-                  className="mr-2 h-4 w-4 animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Creating...
-              </>
-            ) : (
-              'Create Paste'
-            )}
-          </Button>
-          <span className="text-muted-foreground mt-1 text-xs">or press ⌘+Enter</span>
+          <div className="flex flex-col items-center sm:items-end">
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="mr-2 h-4 w-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Creating...
+                </>
+              ) : (
+                'Create Paste'
+              )}
+            </Button>
+            <span className="text-muted-foreground mt-1 hidden text-xs sm:inline">
+              or press ⌘+Enter
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-4 pb-8">
+      <div className="flex-1 overflow-auto p-3 pb-6 sm:p-4 sm:pb-8">
         {pasteType === 'text' ? (
           <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
             <CodeEditor
@@ -374,7 +378,7 @@ export function PasteForm() {
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="max-h-[500px] w-full object-contain"
+                  className="max-h-[300px] w-full object-contain sm:max-h-[500px]"
                 />
               </div>
             ) : (
