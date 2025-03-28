@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: `Terms of Service for ${SITE_NAME}`,
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function TermsPage() {
   return (
     <div className="container flex h-[calc(100vh-6.5rem)] flex-col overflow-hidden py-8">

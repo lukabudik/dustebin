@@ -404,7 +404,10 @@ export function PasteForm() {
               )}
             </Button>
             <span className="text-muted-foreground mt-1 hidden text-xs sm:inline">
-              or press {navigator.platform.includes('Mac') ? '⌘+Enter' : 'Ctrl+Enter'}
+              or press{' '}
+              {typeof navigator !== 'undefined' && navigator.platform.includes('Mac')
+                ? '⌘+Enter'
+                : 'Ctrl+Enter'}
             </span>
           </div>
         </div>

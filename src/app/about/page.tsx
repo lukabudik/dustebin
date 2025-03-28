@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   description: `Learn more about ${SITE_NAME} - ${SITE_DESCRIPTION}`,
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function AboutPage() {
   return (
     <div className="container flex h-[calc(100vh-6.5rem)] flex-col overflow-hidden py-8">
