@@ -167,9 +167,9 @@ Make sure to set up the environment variables in your production environment.
 
 Dustebin allows users to share images with the same privacy and expiration features as text pastes:
 
-- **Image Upload**: Upload images up to 10MB in size
+- **Image Upload**: Upload images up to 50MB in size
 - **Format Support**: JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and BMP
-- **Automatic Compression**: Images are automatically compressed to reduce size while maintaining quality
+- **High Quality Preservation**: Images maintain their original dimensions with high-quality compression
 - **Format Conversion**: Convert images between formats for download
 - **EXIF Data Extraction**: View camera information, photo details, and location data from images
 - **Privacy Protection**: EXIF data is only visible to those with access to the paste
@@ -185,10 +185,10 @@ The EXIF data viewer provides detailed information about images:
 
 ### Image Processing
 
-Images are processed to ensure optimal performance and quality:
+Images are processed to ensure optimal quality:
 
-- **Automatic Resizing**: Large images are resized to a maximum of 2000x2000 pixels
-- **Quality Optimization**: Images are compressed with optimal quality settings
+- **Original Dimensions**: Images maintain their original dimensions without automatic resizing
+- **High-Quality Compression**: Images are compressed with high-quality settings (90% quality)
 - **Format Preservation**: Original format is preserved while offering conversion options
 - **Efficient Storage**: Images are stored in Cloudflare R2 with appropriate caching headers
 

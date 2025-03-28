@@ -58,9 +58,9 @@ export function PasteForm() {
       return;
     }
 
-    const maxSize = 10 * 1024 * 1024;
+    const maxSize = 50 * 1024 * 1024;
     if (file.size > maxSize) {
-      toast.error('Image is too large. Maximum size is 10MB.');
+      toast.error('Image is too large. Maximum size is 50MB.');
       return;
     }
 
@@ -336,7 +336,7 @@ export function PasteForm() {
             <span className="text-muted-foreground text-xs">
               {pasteType === 'text'
                 ? 'Share code snippets, logs, or any text'
-                : 'Share images up to 10MB'}
+                : 'Share images up to 50MB'}
             </span>
           </div>
         </div>

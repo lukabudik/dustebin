@@ -1,8 +1,7 @@
 import sharp from 'sharp';
 
-const MAX_WIDTH = 2000;
-const MAX_HEIGHT = 2000;
-const DEFAULT_QUALITY = 80;
+// Increased quality for better fidelity
+const DEFAULT_QUALITY = 90;
 
 export async function compressImage(
   buffer: Buffer,
@@ -23,7 +22,7 @@ export async function compressImage(
   originalMimeType: string;
 }> {
   try {
-    const { maxWidth = MAX_WIDTH, maxHeight = MAX_HEIGHT, quality = DEFAULT_QUALITY } = options;
+    const { quality = DEFAULT_QUALITY } = options;
 
     const metadata = await sharp(buffer).metadata();
     const originalFormat = metadata.format || 'jpeg';
@@ -34,17 +33,7 @@ export async function compressImage(
       failOnError: false,
     }).withMetadata();
 
-    if (
-      (metadata.width && metadata.width > maxWidth) ||
-      (metadata.height && metadata.height > maxHeight)
-    ) {
-      pipeline = pipeline.resize({
-        width: maxWidth,
-        height: maxHeight,
-        fit: 'inside',
-        withoutEnlargement: true,
-      });
-    }
+    // No automatic resizing - preserve original dimensions
 
     let mimeType: string;
 
@@ -138,7 +127,7 @@ export async function generateThumbnail(
 
 export async function validateImage(
   buffer: Buffer,
-  maxSizeBytes: number = 10 * 1024 * 1024
+  maxSizeBytes: number = 50 * 1024 * 1024
 ): Promise<{
   valid: boolean;
   error?: string;
