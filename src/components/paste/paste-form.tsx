@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { CodeEditor, CodeEditorRef } from '@/components/editor/code-editor';
+import { MonacoEditor, MonacoEditorRef } from '@/components/editor/monaco-editor';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -19,7 +19,7 @@ import { ImageIcon, X } from 'lucide-react';
 export function PasteForm() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const editorRef = useRef<CodeEditorRef>(null);
+  const editorRef = useRef<MonacoEditorRef>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState('');
   const [language, setLanguage] = useState('plaintext');
@@ -416,7 +416,7 @@ export function PasteForm() {
       <div className="flex-1 overflow-auto p-3 pb-6 sm:p-4 sm:pb-8">
         {pasteType === 'text' ? (
           <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
-            <CodeEditor
+            <MonacoEditor
               ref={editorRef}
               value={content}
               onChange={setContent}

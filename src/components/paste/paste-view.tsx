@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { CodeEditor } from '@/components/editor/code-editor';
+import { MonacoEditor } from '@/components/editor/monaco-editor';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/utils/helpers';
 import { ExifViewer } from '@/components/paste/exif-viewer';
@@ -453,7 +453,7 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
         ) : (
           <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
             {showContent ? (
-              <CodeEditor
+              <MonacoEditor
                 value={paste.content}
                 onChange={() => {}}
                 language={paste.language}
