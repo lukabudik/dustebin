@@ -103,7 +103,7 @@ export function PasswordForm({ pasteId, onSuccess }: PasswordFormProps) {
               {error && <p className="text-destructive text-sm">{error}</p>}
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className={'mt-2'}>
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
