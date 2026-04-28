@@ -39,16 +39,30 @@ export function getFileExtensionForLanguage(language: string): string {
     tsx: 'tsx',
     html: 'html',
     css: 'css',
+    scss: 'scss',
     json: 'json',
     markdown: 'md',
     python: 'py',
     rust: 'rs',
+    go: 'go',
+    java: 'java',
+    cpp: 'cpp',
+    c: 'c',
+    csharp: 'cs',
+    php: 'php',
+    ruby: 'rb',
+    swift: 'swift',
+    kotlin: 'kt',
     sql: 'sql',
     xml: 'xml',
+    yaml: 'yaml',
+    toml: 'toml',
+    bash: 'sh',
+    powershell: 'ps1',
     plaintext: 'txt',
   };
 
-  return extensionMap[language] || 'txt';
+  return extensionMap[language] || '';
 }
 
 /**

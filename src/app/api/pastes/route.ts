@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createPaste } from '@/lib/services/paste-service';
 import { createPasteSchema } from '@/lib/validations';
+import { checkContent } from '@/lib/abuse';
+import { prisma } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,7 +47,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const content = result.data.content ?? '';
+    const abuseAction = checkContent(content);
+
+    if (abuseAction === 'block') {
+      return NextResponse.json(
+        {
+          error: 'Content contains prohibited material. Contact abuse@dustebin.com with questions.',
+        },
+        { status: 422 }
+      );
+    }
+
     const paste = await createPaste(result.data);
+
+    if (abuseAction === 'flag') {
+      await prisma.$executeRaw`UPDATE pastes SET is_risky = true WHERE id = ${paste.id}`;
+    }
 
     return NextResponse.json(paste, { status: 201 });
   } catch (error) {

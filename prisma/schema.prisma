@@ -39,6 +39,7 @@ model Paste {
   originalMimeType String? @map("original_mime_type") // Original MIME type
   exifData   Json?    @map("exif_data") // EXIF metadata from the image
   pasteType  String    @default("text") @map("paste_type") // Type of paste: 'text' or 'image'
+  isRisky    Boolean   @default(false) @map("is_risky")
 
   @@map("pastes")
   @@index([language])
