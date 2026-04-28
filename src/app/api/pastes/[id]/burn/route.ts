@@ -6,10 +6,7 @@ import { deletePaste } from '@/lib/services/paste-service'; // Used for burn-aft
  * POST /api/pastes/[id]/burn - Deletes a burn-after-reading paste
  * after user confirmation
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> & { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 

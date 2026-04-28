@@ -4,7 +4,7 @@ import sharp from 'sharp';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> & { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const { id } = await params;

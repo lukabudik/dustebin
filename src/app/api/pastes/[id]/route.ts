@@ -5,10 +5,7 @@ import { getPasteSchema } from '@/lib/validations';
 /**
  * GET /api/pastes/[id] - Retrieves a paste by ID with optional password authentication
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> & { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Get password from headers or query params
     const password =
