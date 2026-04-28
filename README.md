@@ -219,6 +219,17 @@ A GitHub Actions workflow is included to automatically run the cleanup process:
 2. Add your API key as a GitHub secret named `CLEANUP_API_KEY`
 3. Enable GitHub Actions in your repository
 
+## ⚡ Performance
+
+Dustebin is optimized for speed and efficiency:
+
+- **Fast Loading**: Optimized bundle sizes with code splitting and lazy loading
+- **Efficient Compression**: Brotli compression reduces storage and transfer sizes by up to 80%
+- **CDN Integration**: Static assets served via Cloudflare for global performance
+- **Database Optimization**: Indexed queries and connection pooling for fast data access
+- **Image Optimization**: Sharp-based image processing with format conversion
+- **Caching Strategy**: Appropriate cache headers for static and dynamic content
+
 ## 🔒 Security Features
 
 ### Password Protection

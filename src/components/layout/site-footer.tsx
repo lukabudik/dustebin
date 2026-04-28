@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SITE_NAME } from '@/lib/constants';
+import { SITE_NAME, ABUSE_EMAIL } from '@/lib/constants';
 import { CodeIcon, GithubIcon } from 'lucide-react';
 
 export function SiteFooter() {
@@ -37,12 +37,29 @@ export function SiteFooter() {
             >
               Terms
             </Link>
-            <div className="sm:hidden">
-              <Link
-                href="/about"
-                className="text-muted-foreground hover:text-foreground mr-1 text-xs"
-              >
+            <span className="text-muted-foreground/40 hidden sm:inline">•</span>
+            <Link
+              href="https://status.dustebin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground hidden text-xs sm:inline"
+            >
+              Status
+            </Link>
+            <span className="text-muted-foreground/40 hidden sm:inline">•</span>
+            <Link
+              href={`mailto:${ABUSE_EMAIL}`}
+              className="text-muted-foreground hover:text-foreground hidden text-xs sm:inline"
+            >
+              Abuse
+            </Link>
+            <div className="flex items-center gap-1 sm:hidden">
+              <Link href="/about" className="text-muted-foreground hover:text-foreground text-xs">
                 About
+              </Link>
+              <span className="text-muted-foreground/40">•</span>
+              <Link href="/privacy" className="text-muted-foreground hover:text-foreground text-xs">
+                Privacy
               </Link>
             </div>
           </nav>

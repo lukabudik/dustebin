@@ -440,15 +440,67 @@ export function PasteView({ paste: initialPaste }: PasteViewProps) {
         )}
 
         {paste.pasteType === 'image' || paste.hasImage ? (
-          <div className="flex flex-col items-center">
-            <div className="overflow-hidden rounded-md border">
-              <img
-                src={paste.imageUrl}
-                alt=""
-                className="max-h-[300px] w-full object-contain sm:max-h-[600px]"
-                loading="lazy"
-              />
-            </div>
+          <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
+            {showContent ? (
+              <div className="flex flex-col items-center p-2">
+                <div className="overflow-hidden rounded-md">
+                  <img
+                    src={paste.imageUrl}
+                    alt=""
+                    className="max-h-[300px] w-full object-contain sm:max-h-[600px]"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center">
+                <div className="p-8 text-center">
+                  <FlameIcon className="text-destructive mx-auto mb-4 h-12 w-12" />
+                  <h3 className="mb-2 text-lg font-medium">Image Hidden</h3>
+                  <p className="text-muted-foreground mb-4">
+                    This image will be permanently deleted after viewing. This action cannot be
+                    undone.
+                  </p>
+                  <Button
+                    variant="destructive"
+                    onClick={handleBurn}
+                    disabled={isBurning}
+                    className="mt-4"
+                  >
+                    {isBurning ? (
+                      <>
+                        <svg
+                          className="mr-2 h-4 w-4 animate-spin"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Burning...
+                      </>
+                    ) : (
+                      <>
+                        <FlameIcon className="mr-2 h-4 w-4" />
+                        View and Burn
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex h-full min-h-[300px] flex-col overflow-auto rounded-md border">
